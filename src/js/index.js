@@ -48,6 +48,7 @@ function App() {
   const menuInput = $(".input-field");
   const menuList = $("#espresso-menu-list");
   const menuCount = $(".menu-count");
+  const findClickedButtonContainer = (e) => e.target.closest('li')
 
   const countMenuItem = () => {
     const items = $$('.menu-list-item')
@@ -71,6 +72,19 @@ function App() {
     menuInput.value = "";
   };
 
+  const updateMenuItem = (e) => {
+    const menuItemText = findClickedButtonContainer(e).querySelector('.menu-name')
+
+    const updatingName = prompt('뭘로 바꾸시나용', menuItemText.innerText)
+    menuItemText.innerText = updatingName
+  }
+
+  const removeMenuItem = (e) => {
+    const menuItem = findClickedButtonContainer(e)
+    menuItem.remove();
+    updateMenuCount();
+  }
+
   menuForm.addEventListener("submit", (e) => {
     e.preventDefault();
   });
@@ -81,8 +95,17 @@ function App() {
     if (pressedKey !== "Enter") return;
 
     addMenuItem();
-
   });
+
+  menuList.addEventListener('click', (e) => {
+      const btnClassList = e.target.classList
+      if(btnClassList.contains('menu-edit-button')){
+          updateMenuItem(e);
+      }
+      if(btnClassList.contains('menu-remove-button')){
+          removeMenuItem(e);
+      }
+  })
 }
 
 App();
